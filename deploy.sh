@@ -5,13 +5,12 @@ set +e
 # Read the GitHub API PAT capable of accessing the GitHub Pages APIs
 source token.sh
 authorization="Authorization: token $token"
-accept="Accept: application/vnd.github.mister-fantastic-preview+json"
 
 pagesBuildsUrl="https://api.github.com/repos/tomashubelbauer/musicblackholes.com/pages/builds"
 pagesBuildsJson="pages-builds.json"
 
 # Enqueue a GitHub Pages deployment using the API with the PAT
-curl -s -f -X POST -H "$authorization" -H "$accept" $pagesBuildsUrl > $pagesBuildsJson
+curl -s -f -X POST -H "$authorization" $pagesBuildsUrl > $pagesBuildsJson
 status=$(jq '.status' $pagesBuildsJson | tr -d '"')
 echo $status
 
@@ -28,7 +27,7 @@ rm $pagesBuildsJson
 while true
 do
   sleep 5
-  curl -s -f -H "$authorization" -H "$accept" $pagesBuildsLatestUrl > $pagesBuildsLatestJson
+  curl -s -f -H "$authorization" $pagesBuildsLatestUrl > $pagesBuildsLatestJson
   status=$(jq '.status' $pagesBuildsLatestJson | tr -d '"')
   echo $status
   
